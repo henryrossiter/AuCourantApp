@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1068249737288",
+    "firebase_url": "https://aucourantexpo.firebaseio.com",
+    "project_id": "aucourantexpo",
+    "storage_bucket": "aucourantexpo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068249737288:android:c22f2e2a4f947a38",
+        "android_client_info": {
+          "package_name": "com.henryrossiter.aucourant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068249737288-aco63bgj0r13vje0coh4k8b9etnpg20e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIvDcs2h-VkwT0xZkkmlWHGAm7iom5SR0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

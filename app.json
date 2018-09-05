@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "au-courant",
+    "description": "This project is really great.",
+    "slug": "au-courant",
+    "privacy": "public",
+    "sdkVersion": "29.0.0",
+    "platforms": ["ios", "android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/AuCourantIcon.png",
+    "splash": {
+      "image": "./assets/AuCourantSplash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.henryrossiter.aucourant",
+      "googleServicesFile": "./google-services.json",
+    }
+  }
+}

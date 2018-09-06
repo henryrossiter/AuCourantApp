@@ -1,19 +1,47 @@
 export const colors = {
-  colorOne: '#b47050',
+  colorOne: '#fc8419',
   colorOneAccent: '#dfa7b3',
-  colorTwo: '#9cafb7',
+  colorTwo: '#212121',
   colorTwoAccent: '#aebdc4',
   colorBlack: '#000000',
   colorRed: '#8b0000',
   colorBlue: '#483d8b'
 }
 
-
 export const styleScheme = {
   itemRadius: 0,
   borderWidth: 2,
   margin: 2,
   padding: 8,
+}
+
+export const authStyles = {
+  container: {
+     padding: styleScheme.padding,
+     flex: 1,
+     flexDirection: 'column',
+     alignItems: 'stretch',
+     justifyContent: 'center',
+     backgroundColor: colors.colorTwo
+    },
+    input:{
+        height: 40,
+        backgroundColor: 'rgba(225,225,225,0.2)',
+        padding: styleScheme.padding,
+        margin: styleScheme.margin,
+        color: '#000000'
+    },
+    buttonContainer:{
+        height: 40,
+        backgroundColor: colors.colorOne,
+        padding: styleScheme.padding,
+        margin: styleScheme.margin,
+    },
+    buttonText:{
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: '700'
+    }
 }
 
 export const dashboardStyles = {
@@ -97,7 +125,8 @@ export const styles = {
   bodyContainer: {
     margin: styleScheme.margin,
     flex: 1,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    backgroundColor: colors.colorTwo
   },
   addAlertBodyContainer: {
     margin: styleScheme.margin,

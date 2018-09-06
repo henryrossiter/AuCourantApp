@@ -7,6 +7,8 @@ import { colors, styleScheme, dashboardStyles, styles, newAlertStyles } from './
 
 import { createStackNavigator, NavigationActions } from 'react-navigation';
 
+import { Notifications } from 'expo';
+
 import * as firebase from 'firebase';
 
 
@@ -14,12 +16,8 @@ function addCom(newStock) {
   this.state.stockList.unshift(newStock)
   this.saveKey(this.state.stockList)
   this.getKey()
+  this.saveDashToFirebase()
 
-  
-  let uid = firebase.auth().currentUser.uid;
-  firebase.database().ref("users").child(uid).child("dashItem-"+this.state.stockList.length).update({
-    item: newStock
-  })
 }
 function removeCom(index){
   this.state.stockList.splice(index,1)
@@ -73,8 +71,21 @@ export class DashboardScreen extends Component {
       console.log("Error resetting stockList data" + error);
     }
   }
+  saveDashToFirebase(){
+    let uid = firebase.auth().currentUser.uid;
+    firebase.database().ref("users").child(uid).update({
+      dash: this.state.stockList
+    })
+
+  }
+  loadDashFromFirebase(){
+
+  }
   componentDidMount() {
-    this.getKey();
+    //this.getKey();
+  }
+  componentWillUnmount(){
+    this.saveDashToFirebase();
   }
 
   render() {

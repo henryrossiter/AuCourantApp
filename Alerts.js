@@ -11,10 +11,13 @@ import { createStackNavigator, NavigationActions } from 'react-navigation';
 
 import * as firebase from 'firebase';
 
+
+
 function addNot(newAlert) {
   this.state.notList.push(newAlert)
   this.saveKey(this.state.notList)
   this.getKey( this.state.notList )
+  this.saveAlertsToFirebase()
 }
 function clearAlerts(){
   this.clearList();
@@ -65,6 +68,13 @@ export class AlertListScreen extends Component {
       console.log("Error saving notList data" + error);
     }
   }
+  saveAlertsToFirebase() {
+    //add alert to firebase
+    let uid = firebase.auth().currentUser.uid;
+    firebase.database().ref("users").child(uid).update({
+      alerts : this.state.notList
+    })
+  }
   async clearList() {
     try {
       await AsyncStorage.removeItem('alerts');
@@ -77,6 +87,9 @@ export class AlertListScreen extends Component {
   componentDidMount() {
     this.getKey();
 
+  }
+  componentWillUnmount() {
+    this.saveAlertsToFirebase();
   }
   render() {
     const { navigate } = this.props.navigation;
@@ -175,6 +188,7 @@ export class AddIntervalAlertScreen extends Component {
       title: 'Schedule new Alert',
     };
   };
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -205,15 +219,6 @@ export class AddIntervalAlertScreen extends Component {
           onPress={() => {
           newAlert = [this.state.item, this.state.interval]
           addNot(newAlert)
-
-          //add alert to firebase
-          let uid = firebase.auth().currentUser.uid;
-          firebase.database().ref("users").child(uid).update({
-            newIntervalAlert : {
-              item : this.state.item,
-              interval : this.state.interval
-            }
-          })
 
           navigate('Home')}} style={styles.addListItem}>
         </Button>

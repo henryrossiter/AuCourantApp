@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { Alert, Button, Text, View, ActivityIndicator, TextInput, AsyncStorage } from 'react-native';
+import { Alert, Button, Text, View, ActivityIndicator, TextInput, AsyncStorage, TouchableOpacity } from 'react-native';
 
-import { createDrawerNavigator, createStackNavigator, createSwitchNavigator, NavigationActions } from 'react-navigation';
+import { createDrawerNavigator, createStackNavigator, createSwitchNavigator, NavigationActions, createMaterialTopTabNavigator } from 'react-navigation';
 
 import { Permissions, Notifications } from 'expo';
 
@@ -11,6 +11,8 @@ import * as firebase from 'firebase';
 import { DashboardScreen, AddDashItemScreen, DashNavigator } from './Dashboard'
 
 import { AlertListScreen, AddAlertScreen, AddRelativeThresholdAlertScreen, AddStaticThresholdAlertScreen, AlertDetailScreen, AlertNavigator } from './Alerts'
+
+import { styles, authStyles } from './styles'
 
 
 class LoadingScreen extends Component {
@@ -48,30 +50,35 @@ class SignUpScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View>
-        <Text>Sign Up</Text>
+
+      <View style={authStyles.container}>
         {this.state.errorMessage &&
           <Text style={{ color: 'red' }}>
             {this.state.errorMessage}
           </Text>}
         <TextInput
-          placeholder="Email"
+        style = {authStyles.input}
           autoCapitalize="none"
+          placeholder="Email"
+          keyboardType='email-address'
+          returnKeyType="next"
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
         />
         <TextInput
           secureTextEntry
-          placeholder="Password"
+          style={authStyles.input}
           autoCapitalize="none"
+          placeholder="Password"
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Sign Up" onPress={this.handleSignUp} />
-        <Button
-          title="Already have an account? Login"
-          onPress={() => this.props.navigation.navigate('Login')}
-        />
+        <TouchableOpacity style = {authStyles.buttonContainer} onPress={this.handleSignUp}>
+          <Text  style={authStyles.buttonText}>CREATE ACCOUNT</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style = {authStyles.buttonContainer} onPress={() => navigate('Login')}>
+          <Text  style={authStyles.buttonText}>{"Already have an account? Log in"}</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -93,30 +100,34 @@ class LoginScreen extends Component {
     render() {
       const { navigate } = this.props.navigation;
       return (
-        <View>
-          <Text>Login</Text>
+        <View style={authStyles.container}>
           {this.state.errorMessage &&
             <Text style={{ color: 'red' }}>
               {this.state.errorMessage}
             </Text>}
           <TextInput
+          style = {authStyles.input}
             autoCapitalize="none"
             placeholder="Email"
+            keyboardType='email-address'
+            returnKeyType="next"
             onChangeText={email => this.setState({ email })}
             value={this.state.email}
           />
           <TextInput
             secureTextEntry
+            style={authStyles.input}
             autoCapitalize="none"
             placeholder="Password"
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
-          <Button title="Login" onPress={this.handleLogin} />
-          <Button
-            title="Don't have an account? Sign Up"
-            onPress={() => navigate('SignUp')}
-          />
+          <TouchableOpacity style = {authStyles.buttonContainer} onPress={this.handleLogin}>
+            <Text  style={authStyles.buttonText}>LOGIN</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style = {authStyles.buttonContainer} onPress={() => navigate('SignUp')}>
+            <Text  style={authStyles.buttonText}>{"Don't have an account? Sign Up"}</Text>
+          </TouchableOpacity>
         </View>
       )
     }
@@ -146,7 +157,7 @@ class WelcomeScreen extends Component {
 
     let uid = firebase.auth().currentUser.uid;
     firebase.database().ref("users").child(uid).update({
-      expoPushToken: token
+      userToken: token
     })
   }
   render() {
@@ -168,20 +179,34 @@ export default class App extends Component {
     firebase.initializeApp(config);
   }
 
-
   render() {
         return (
-        <RootStackNavigator/>
+        <AppNavigation/>
         );
   }
 }
 
 
-const DrawerNavigator = createDrawerNavigator({
+const DrawerNavigator = createMaterialTopTabNavigator(
+  {
   Dashboard: {screen: DashNavigator},
   Home: {screen: AlertNavigator}
+  }, {
+  tabBarOptions: {
+    scrollEnabled: false,
+    labelStyle: {
+      fontSize: 12,
+    },
 
-});
+    style: {
+      backgroundColor: '#fc8419',
+    },
+    indicatorStyle: {
+      backgroundColor: '#fff'
+    }
+  },
+}
+);
 
 const RootStackNavigator = createSwitchNavigator({
   Loading: { screen: LoadingScreen },
@@ -193,5 +218,6 @@ const RootStackNavigator = createSwitchNavigator({
 
 })
 const AppNavigation = () => (
+  //<DrawerNavigator/>
   <RootStackNavigator/>
 );

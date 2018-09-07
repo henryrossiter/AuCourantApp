@@ -3,6 +3,7 @@ export const colors = {
   colorOneAccent: '#dfa7b3',
   colorTwo: '#212121',
   colorTwoAccent: '#aebdc4',
+  colorThree: '#aaaaaa',
   colorBlack: '#000000',
   colorRed: '#8b0000',
   colorBlue: '#483d8b'
@@ -126,7 +127,6 @@ export const styles = {
     margin: styleScheme.margin,
     flex: 1,
     flexWrap: 'wrap',
-    backgroundColor: colors.colorTwo
   },
   addAlertBodyContainer: {
     margin: styleScheme.margin,

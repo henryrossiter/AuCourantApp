@@ -11,13 +11,14 @@ import { Notifications } from 'expo';
 
 import * as firebase from 'firebase';
 
+import { FirebaseFetcher } from './getDash'
+
 
 function addCom(newStock) {
   this.state.stockList.unshift(newStock)
   this.saveKey(this.state.stockList)
   this.getKey()
   this.saveDashToFirebase()
-
 }
 function removeCom(index){
   this.state.stockList.splice(index,1)
@@ -78,14 +79,13 @@ export class DashboardScreen extends Component {
     })
 
   }
-  loadDashFromFirebase(){
+  componentDidMount(){
+    var fetcher= new FirebaseFetcher();
+    this.setState({ stockList: fetcher.getData()})
+  }
 
-  }
-  componentDidMount() {
-    //this.getKey();
-  }
+
   componentWillUnmount(){
-    this.saveDashToFirebase();
   }
 
   render() {

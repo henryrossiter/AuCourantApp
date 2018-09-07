@@ -170,6 +170,7 @@ class WelcomeScreen extends Component {
 export default class App extends Component {
   constructor(){
     super();
+    console.ignoredYellowBox = ['Setting a timer'];
     var config = {
       apiKey: "AIzaSyDfw025ab2w3_oA_vXZShimqlmJMAom4rE",
       authDomain: "aucourantexpo.firebaseapp.com",
@@ -178,7 +179,6 @@ export default class App extends Component {
     };
     firebase.initializeApp(config);
   }
-
   render() {
         return (
         <AppNavigation/>

@@ -3,16 +3,11 @@ import { Alert, Button, Text, View, ScrollView, TouchableOpacity, AppRegistry, A
 
 import { colors, styleScheme, dashboardStyles, styles, newAlertStyles } from './styles';
 
-//import { Commodity } from './listItems'
-
 import { createStackNavigator, NavigationActions } from 'react-navigation';
 
 import { Notifications } from 'expo';
 
 import * as firebase from 'firebase';
-
-import { FirebaseFetcher } from './getDash'
-
 
 function addCom(newStock) {
   this.state.stockList.unshift(newStock)
@@ -22,18 +17,21 @@ function addCom(newStock) {
 }
 function removeCom(index){
   this.state.stockList.splice(index,1)
-  this.saveKey(this.state.stockList)
-  this.getKey()
+  this.saveKey(this.state.stockList);
+  this.getKey();
+  this.saveDashToFirebase();
 }
 function clearCom(){
   this.clearList();
+  this.saveDashToFirebase();
 }
 
 export class DashboardScreen extends Component {
   constructor(){
     super();
     this.state = {
-      stockList: []// _retrieveData()
+      stockList: [],
+      isLoading: true
     }
     addCom = addCom.bind(this);
     removeCom = removeCom.bind(this);
@@ -80,21 +78,35 @@ export class DashboardScreen extends Component {
 
   }
   componentDidMount(){
-    var fetcher= new FirebaseFetcher();
-    this.setState({ stockList: fetcher.getData()})
+    let uid = firebase.auth().currentUser.uid;
+    firebase.database().ref("users").child(uid).child("dash").once('value').then((snapshot) => {
+        if (snapshot.val() && snapshot.val().length>0){
+          this.setState({ stockList: snapshot.val(),
+                          isLoading: false});
+        } else {
+          this.setState({isLoading: false});
+        }
+
+    });
   }
 
-
-  componentWillUnmount(){
-  }
 
   render() {
     const { navigate } = this.props.navigation;
+    if(this.state.isLoading){
+      return(
+        <View style={{flex: 1, padding: 20}}>
+          <ActivityIndicator/>
+        </View>
+      );
+    }
+
     var stocks = this.state.stockList.map((type, index)=> {
     return(
       <Commodity key={index} stock={type} index={index}></Commodity>
     );
   })
+
     return (
       <View style={styles.bodyContainer}>
         <ScrollView>
@@ -158,7 +170,7 @@ class Commodity extends Component{
     }
     else if (this.state.isExpanded==false) {
       return (
-        <View style = {dashboardStyles.listItemContainer}>
+        <View style = {styles.listItemContainer}>
           <View style = {dashboardStyles.listItemSummaryContainer}>
             <View style = {dashboardStyles.listItemIdContainer}>
               <Text style= {dashboardStyles.itemIdText}>{this.stock.charAt(0).toUpperCase()+this.stock.substring(1)+": "}</Text>

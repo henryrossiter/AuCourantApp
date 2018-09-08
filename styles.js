@@ -1,17 +1,12 @@
 export const colors = {
-  colorOne: '#fc8419',
-  colorOneAccent: '#dfa7b3',
-  colorTwo: '#212121',
-  colorTwoAccent: '#aebdc4',
-  colorThree: '#aaaaaa',
-  colorBlack: '#000000',
-  colorRed: '#8b0000',
-  colorBlue: '#483d8b'
+  colorOne: '#fc8419', //orange
+  colorOneAccent: '#ffffff',
+
 }
 
 export const styleScheme = {
-  itemRadius: 0,
-  borderWidth: 2,
+  itemRadius: 2,
+  borderWidth: 1,
   margin: 2,
   padding: 8,
 }
@@ -23,7 +18,6 @@ export const authStyles = {
      flexDirection: 'column',
      alignItems: 'stretch',
      justifyContent: 'center',
-     backgroundColor: colors.colorTwo
     },
     input:{
         height: 40,
@@ -35,6 +29,8 @@ export const authStyles = {
     buttonContainer:{
         height: 40,
         backgroundColor: colors.colorOne,
+        borderRadius: styleScheme.itemRadius,
+        borderWidth: styleScheme.borderWidth,
         padding: styleScheme.padding,
         margin: styleScheme.margin,
     },
@@ -46,17 +42,7 @@ export const authStyles = {
 }
 
 export const dashboardStyles = {
-  listItemContainer: {
-    borderWidth: styleScheme.borderWidth,
-    margin: styleScheme.margin,
-    borderColor: colors.colorBlack,
-    borderBottomLeftRadius: styleScheme.itemRadius,
-    borderBottomRightRadius: styleScheme.itemRadius,
-    borderTopLeftRadius: styleScheme.itemRadius,
-    borderTopRightRadius: styleScheme.itemRadius,
-    padding: styleScheme.padding,
-    flexDirection: 'column'
-  },
+
   listItemDetailsContainer: {
     flexDirection: 'row',
     margin: styleScheme.margin/2,
@@ -86,11 +72,7 @@ export const dashboardStyles = {
     justifyContent: 'center',
     borderWidth: styleScheme.borderWidth,
     margin: styleScheme.margin,
-    borderColor: colors.colorBlue,
-    borderBottomLeftRadius: styleScheme.itemRadius,
-    borderBottomRightRadius: styleScheme.itemRadius,
-    borderTopLeftRadius: styleScheme.itemRadius,
-    borderTopRightRadius: styleScheme.itemRadius,
+    borderRadius: styleScheme.itemRadius,
     padding: styleScheme.padding,
   },
   listItemDeleteContainer: {
@@ -99,11 +81,7 @@ export const dashboardStyles = {
     justifyContent: 'center',
     borderWidth: styleScheme.borderWidth,
     margin: styleScheme.margin,
-    borderColor: colors.colorRed,
-    borderBottomLeftRadius: styleScheme.itemRadius,
-    borderBottomRightRadius: styleScheme.itemRadius,
-    borderTopLeftRadius: styleScheme.itemRadius,
-    borderTopRightRadius: styleScheme.itemRadius,
+    borderRadius: styleScheme.itemRadius,
     padding: styleScheme.padding,
   },
   itemIdText: {
@@ -124,9 +102,17 @@ export const dashboardStyles = {
 
 export const styles = {
   bodyContainer: {
-    margin: styleScheme.margin,
+    padding: 2,
+    backgroundColor: colors.colorOneAccent,
     flex: 1,
     flexWrap: 'wrap',
+  },
+  listItemContainer: {
+    padding: styleScheme.padding,
+    flexDirection: 'column',
+    borderWidth: 1,
+    borderRadius: 2,
+    margin: styleScheme.margin
   },
   addAlertBodyContainer: {
     margin: styleScheme.margin,
@@ -163,64 +149,16 @@ export const styles = {
     textAlign: 'center',
     fontWeight: '100'
   },
-  listItemStaticThreshold: {
-    borderWidth: styleScheme.borderWidth,
-    margin: styleScheme.margin,
-    borderColor: colors.colorOne,
-    borderBottomLeftRadius: styleScheme.itemRadius,
-    borderBottomRightRadius: styleScheme.itemRadius,
-    borderTopLeftRadius: styleScheme.itemRadius,
-    borderTopRightRadius: styleScheme.itemRadius,
-    padding: styleScheme.padding,
-    backgroundColor: colors.colorOneAccent
-  },
-  listItemRelativeThreshold: {
-    //height: 80,
-    borderWidth: styleScheme.borderWidth,
-    margin: styleScheme.margin,
-    borderColor: colors.colorTwo,
-    borderBottomLeftRadius: styleScheme.itemRadius,
-    borderBottomRightRadius: styleScheme.itemRadius,
-    borderTopLeftRadius: styleScheme.itemRadius,
-    borderTopRightRadius: styleScheme.itemRadius,
-    padding: 10,
-    backgroundColor: colors.colorTwoAccent
-  },
   addListItem: {
     height: 40,
     borderWidth: styleScheme.borderWidth,
     margin: styleScheme.margin,
-    borderColor: '#000000',
-    borderBottomLeftRadius: styleScheme.itemRadius,
-    borderBottomRightRadius: styleScheme.itemRadius,
-    borderTopLeftRadius: styleScheme.itemRadius,
-    borderTopRightRadius: styleScheme.itemRadius,
+    borderColor: '#101010',
+    borderRadius: styleScheme.itemRadius,
   }
 }
 
 export const newAlertStyles = {
-  staticThresholdAlert: {
-    borderWidth: styleScheme.borderWidth,
-    margin: styleScheme.margin,
-    padding: styleScheme.padding,
-    borderColor: colors.colorOne,
-    borderBottomLeftRadius: styleScheme.itemRadius,
-    borderBottomRightRadius: styleScheme.itemRadius,
-    borderTopLeftRadius: styleScheme.itemRadius,
-    borderTopRightRadius: styleScheme.itemRadius,
-    backgroundColor: colors.colorOneAccent
-  },
-  relativeThresholdAlert: {
-    borderWidth: styleScheme.borderWidth,
-    margin: styleScheme.margin,
-    padding: styleScheme.padding,
-    borderColor: colors.colorTwo,
-    borderBottomLeftRadius: styleScheme.itemRadius,
-    borderBottomRightRadius: styleScheme.itemRadius,
-    borderTopLeftRadius: styleScheme.itemRadius,
-    borderTopRightRadius: styleScheme.itemRadius,
-    backgroundColor: colors.colorTwoAccent
-  },
   newAlertTitleText: {
     fontSize: 24,
     textAlign: 'left',

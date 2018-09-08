@@ -48,7 +48,7 @@ export class IntervalAlert extends Component{
   }
   render(){
     return(
-      <View style = {styles.listItemStaticThreshold}>
+      <View style = {styles.listItemContainer}>
         <Text>{this.getDescription()}</Text>
       </View>
     );

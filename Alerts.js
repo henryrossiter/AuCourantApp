@@ -11,29 +11,19 @@ import { createStackNavigator, NavigationActions } from 'react-navigation';
 
 import * as firebase from 'firebase';
 
-
-
 function addNot(newAlert) {
-  this.state.notList.push(newAlert)
-  this.saveKey(this.state.notList)
-  this.getKey( this.state.notList )
-  this.saveAlertsToFirebase()
+  this.setState({
+  notList: this.state.notList.concat([newAlert])
+  })
+  this.saveKey(this.state.notList);
+  this.getKey();
+  this.saveAlertsToFirebase();
 }
 function clearAlerts(){
   this.clearList();
+  this.saveAlertsToFirebase();
 }
-function getPrice(stock){
-  URL = 'https://www.quandl.com/api/v3/datasets/LME/AB_al.json?column_index=1&api_key=bARjQpZVvriz3zaVD6Qa';
-  fetch(URL).then(response => {
-    return response.json();
-  })
-  .then(data => {
-  // Work with JSON data here
-  console.log(data.dataset.data[0].toString());
-}).catch(err => {
-  // Do something for an error here
-});
-}
+
 export class AlertListScreen extends Component {
   constructor(){
     super();
@@ -46,8 +36,6 @@ export class AlertListScreen extends Component {
   static navigationOptions = {
     title: 'Active Alerts',
   };
-
-
   async getKey() {
     try {
       const value = await AsyncStorage.getItem('alerts');
@@ -63,7 +51,7 @@ export class AlertListScreen extends Component {
   }
   async saveKey(value) {
     try {
-      await AsyncStorage.setItem('alerts', JSON.stringify(value));
+      await AsyncStorage.setItem('alerts', JSON.stringify(value.slice(0)));
     } catch (error) {
       console.log("Error saving notList data" + error);
     }
@@ -72,7 +60,7 @@ export class AlertListScreen extends Component {
     //add alert to firebase
     let uid = firebase.auth().currentUser.uid;
     firebase.database().ref("users").child(uid).update({
-      alerts : this.state.notList
+      alerts : this.state.notList.slice(0)
     })
   }
   async clearList() {
@@ -83,16 +71,28 @@ export class AlertListScreen extends Component {
       console.log("Error resetting notList data" + error);
     }
   }
+  componentDidMount(){
+    let uid = firebase.auth().currentUser.uid;
+    firebase.database().ref("users").child(uid).child("alerts").once('value').then((snapshot) => {
+      if (snapshot.val() && snapshot.val().length>0){
+        this.setState({ notList: snapshot.val(),
+                          isLoading: false});
+      } else {
+        this.setState({isLoading: false});
+      }
 
-  componentDidMount() {
-    this.getKey();
-
-  }
-  componentWillUnmount() {
-    this.saveAlertsToFirebase();
+    });
   }
   render() {
     const { navigate } = this.props.navigation;
+    if(this.state.isLoading){
+      return(
+        <View style={{flex: 1, padding: 20}}>
+          <ActivityIndicator/>
+        </View>
+      );
+    }
+
     var notList = this.state.notList.map((params, index) => {
       return (
         <TouchableOpacity onPress={() => navigate('AlertDetails', {itemKey: params[0]})}
@@ -136,41 +136,11 @@ export class AddAlertScreen extends Component {
     const { navigate } = this.props.navigation;
     return (
       <ScrollView>
-        <TouchableOpacity onPress={() => navigate('AddIntervalAlert')} style={newAlertStyles.staticThresholdAlert}>
+        <TouchableOpacity onPress={() => navigate('AddIntervalAlert')} style={styles.listItemContainer}>
           <Text style = {newAlertStyles.newAlertTitleText}>Interval Alert</Text>
           <Text style = {newAlertStyles.newAlertDescText}>Receive price alerts at a scheduled time interval</Text>
         </TouchableOpacity>
       </ScrollView>
-    );
-  }
-}
-
-export class AddRelativeThresholdAlertScreen extends Component {
-  constructor(){
-    super();
-  }
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: 'New Relative Alert',
-    };
-  };
-  render() {
-    const { navigate } = this.props.navigation;
-    return (
-      <View style ={styles.bodyContainer}>
-      <TouchableOpacity
-        onPress={() => {
-          //newAlert = new RelativeThresholdAlert('SBX', 55, 'up')
-          addNot(['SBX', 55, 'up'])
-
-          //add to firebase database
-
-
-          navigate('Home')}}
-        style={styles.addListItem}>
-        <Text style={styles.buttonText}>New</Text>
-      </TouchableOpacity>
-      </View>
     );
   }
 }
@@ -188,9 +158,10 @@ export class AddIntervalAlertScreen extends Component {
       title: 'Schedule new Alert',
     };
   };
-
   render() {
     const { navigate } = this.props.navigation;
+    var item = "al";
+    var interval = "day";
     return (
       <View style ={styles.addAlertBodyContainer}>
         <Text style = {{}}>{'Notify me with the price of '}</Text>
@@ -198,7 +169,8 @@ export class AddIntervalAlertScreen extends Component {
           <Picker
             style={{height: 50, flex:.5}}
             selectedValue={this.state.item}
-            onValueChange={(itemValue, itemIndex) => this.setState({item: itemValue})}>
+            //onValueChange={(itemValue, itemIndex) => this.setState({item: itemValue})}>
+            onValueChange={(itemValue, itemIndex) => item = itemValue}>
             <Picker.Item label="Aluminum" value="al" />
             <Picker.Item label="Copper" value="cu" />
             <Picker.Item label="Zinc" value="zi"/>
@@ -207,7 +179,8 @@ export class AddIntervalAlertScreen extends Component {
           <Picker
             style={{height: 50, flex:.5}}
             selectedValue={this.state.interval}
-            onValueChange={(itemValue, itemIndex) => this.setState({interval: itemValue})}>
+            //onValueChange={(itemValue, itemIndex) => this.setState({interval: itemValue})}>
+            onValueChange={(itemValue, itemIndex) => interval = itemValue}>
             <Picker.Item label="hour" value="hour" />
             <Picker.Item label="day" value="day" />
             <Picker.Item label="week" value="week" />
@@ -217,67 +190,12 @@ export class AddIntervalAlertScreen extends Component {
         <Button
           title = "Save"
           onPress={() => {
-          newAlert = [this.state.item, this.state.interval]
-          addNot(newAlert)
-
-          navigate('Home')}} style={styles.addListItem}>
-        </Button>
-      </View>
-    );
-  }
-}
-
-export class AddStaticThresholdAlertScreen extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      threshold: '0',
-      item: "al",
-      direction: "rises"
-    }
-  }
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: 'New Static Threshold Alert',
-    };
-  };
-  render() {
-    const { navigate } = this.props.navigation;
-    return (
-      <View style ={styles.addAlertBodyContainer}>
-        <Text style = {{}}>{'Notify me when the price of '}</Text>
-        <View style={styles.inputContainer}>
-          <Picker
-            style={{height: 50, flex:.5}}
-            selectedValue={this.state.item}
-            onValueChange={(itemValue, itemIndex) => this.setState({item: itemValue})}>
-            <Picker.Item label="Aluminum" value="al" />
-            <Picker.Item label="Copper" value="cu" />
-            <Picker.Item label="Zinc" value="zi"/>
-          </Picker>
-          <Picker
-            style={{height: 50, flex:.5}}
-            selectedValue={this.state.direction}
-            onValueChange={(itemValue, itemIndex) => this.setState({direction: itemValue})}>
-            <Picker.Item label="rises above" value="rises above" />
-            <Picker.Item label="falls below" value="falls below" />
-          </Picker>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{height: 50, flex: 1}}
-            keyboardType='numeric'
-            maxLength={5}
-            onChangeText={(text) => this.setState({threshold: text})}
-            value={this.state.threshold}
-          />
-        </View>
-        <Button
-          title = "Save"
-          onPress={() => {
-          newAlert = [this.state.item, this.state.threshold, this.state.direction]//new StaticThresholdAlert(this.state.item, this.state.threshold, this.state.direction)
-          addNot(newAlert)
-          navigate('Home')}} style={styles.addListItem}>
+            //alertHolder = { currItem: this.state.item}
+            newAlert = [item, interval];
+            addNot(newAlert);
+            navigate('Home')
+          }}
+          style={styles.addListItem}>
         </Button>
       </View>
     );
@@ -342,7 +260,5 @@ export const  AlertNavigator = createStackNavigator({
   Home: {screen: AlertListScreen},
   AlertDetails: {screen: AlertDetailScreen},
   NewAlert: {screen: AddAlertScreen},
-  AddStaticThreshold: {screen: AddStaticThresholdAlertScreen},
-  AddRelativeThreshold: {screen: AddRelativeThresholdAlertScreen},
   AddIntervalAlert: {screen: AddIntervalAlertScreen}
 });

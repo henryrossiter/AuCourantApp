@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Alert, Button, Text, View, ActivityIndicator, TextInput, AsyncStorage, TouchableOpacity } from 'react-native';
 
-import { createDrawerNavigator, createStackNavigator, createSwitchNavigator, NavigationActions, createMaterialTopTabNavigator } from 'react-navigation';
+import { createTabNavigator, createStackNavigator, createSwitchNavigator, NavigationActions, createBottomTabNavigator } from 'react-navigation';
 
 import { Permissions, Notifications } from 'expo';
 
@@ -12,7 +12,7 @@ import { DashboardScreen, AddDashItemScreen, DashNavigator } from './Dashboard'
 
 import { AlertListScreen, AddAlertScreen, AddRelativeThresholdAlertScreen, AddStaticThresholdAlertScreen, AlertDetailScreen, AlertNavigator } from './Alerts'
 
-import { styles, authStyles } from './styles'
+import { styles, authStyles, colors } from './styles'
 
 
 class LoadingScreen extends Component {
@@ -153,16 +153,20 @@ class WelcomeScreen extends Component {
 
     if (finalStatus !== 'granted') { return; }
 
-    let token = await Notifications.getExpoPushTokenAsync();
-
+    let expoTok = await Notifications.getExpoPushTokenAsync();
+    let senderConfig = {
+      fcmSenderId: "1068249737288"
+    };
+    //let fireTok = await Notifications.getDevicePushTokenAsync(senderConfig);
     let uid = firebase.auth().currentUser.uid;
+
     firebase.database().ref("users").child(uid).update({
-      userToken: token
+      expoToken: expoTok,
     })
   }
   render() {
     return (
-      <DrawerNavigator/>
+      <TabNavigator/>
     )
   }
 }
@@ -177,7 +181,9 @@ export default class App extends Component {
       databaseURL: "https://aucourantexpo.firebaseio.com",
       storageBucket: "aucourantexpo.appspot.com",
     };
-    firebase.initializeApp(config);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(config);
+    }
   }
   render() {
         return (
@@ -187,24 +193,22 @@ export default class App extends Component {
 }
 
 
-const DrawerNavigator = createMaterialTopTabNavigator(
+const TabNavigator = createBottomTabNavigator(
   {
   Dashboard: {screen: DashNavigator},
   Home: {screen: AlertNavigator}
   }, {
   tabBarOptions: {
-    scrollEnabled: false,
-    labelStyle: {
-      fontSize: 12,
-    },
-
-    style: {
-      backgroundColor: '#fc8419',
-    },
-    indicatorStyle: {
-      backgroundColor: '#fff'
-    }
+  activeTintColor: colors.colorOne,
+  labelStyle: {
+    fontSize: 24,
   },
+  style: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+}
 }
 );
 
@@ -214,10 +218,10 @@ const RootStackNavigator = createSwitchNavigator({
   SignUp: {screen: SignUpScreen },
   Welcome: { screen: WelcomeScreen },
 
-  Main: {screen: DrawerNavigator }
+  Main: {screen: TabNavigator }
 
 })
 const AppNavigation = () => (
-  //<DrawerNavigator/>
+  //<TabNavigator/>
   <RootStackNavigator/>
 );

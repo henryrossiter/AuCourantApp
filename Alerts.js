@@ -11,10 +11,11 @@ import { createStackNavigator, NavigationActions } from 'react-navigation';
 
 import * as firebase from 'firebase';
 
-function addNot(newAlert) {
-  this.setState({
-  notList: this.state.notList.concat([newAlert])
-  })
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+
+function addNot(newItem, newInt) {
+  console.log(Array.from(arguments));
+  this.state.notList.unshift(Array.from(arguments));
   this.saveKey(this.state.notList);
   this.getKey();
   this.saveAlertsToFirebase();
@@ -163,14 +164,13 @@ export class AddIntervalAlertScreen extends Component {
     var item = "al";
     var interval = "day";
     return (
-      <View style ={styles.addAlertBodyContainer}>
+      <View style ={styles.bodyContainer}>
         <Text style = {{}}>{'Notify me with the price of '}</Text>
         <View style={styles.inputContainer}>
           <Picker
             style={{height: 50, flex:.5}}
             selectedValue={this.state.item}
-            //onValueChange={(itemValue, itemIndex) => this.setState({item: itemValue})}>
-            onValueChange={(itemValue, itemIndex) => item = itemValue}>
+            onValueChange={(itemValue, itemIndex) => this.setState({item: itemValue})}>
             <Picker.Item label="Aluminum" value="al" />
             <Picker.Item label="Copper" value="cu" />
             <Picker.Item label="Zinc" value="zi"/>
@@ -179,24 +179,22 @@ export class AddIntervalAlertScreen extends Component {
           <Picker
             style={{height: 50, flex:.5}}
             selectedValue={this.state.interval}
-            //onValueChange={(itemValue, itemIndex) => this.setState({interval: itemValue})}>
-            onValueChange={(itemValue, itemIndex) => interval = itemValue}>
+            onValueChange={(itemValue, itemIndex) => this.setState({interval: itemValue})}>
             <Picker.Item label="hour" value="hour" />
             <Picker.Item label="day" value="day" />
             <Picker.Item label="week" value="week" />
             <Picker.Item label="month" value="month" />
           </Picker>
         </View>
-        <Button
-          title = "Save"
+        <TouchableOpacity
           onPress={() => {
-            //alertHolder = { currItem: this.state.item}
-            newAlert = [item, interval];
-            addNot(newAlert);
+            addNot(this.state.item, this.state.interval);
             navigate('Home')
-          }}
-          style={styles.addListItem}>
-        </Button>
+          }}>
+          <View style = {styles.listItemContainerCentered}>
+            <MaterialIcons name="playlist-add" size={32} color={colors.colorOne} />
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }

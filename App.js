@@ -8,11 +8,13 @@ import { Permissions, Notifications } from 'expo';
 
 import * as firebase from 'firebase';
 
-import { DashboardScreen, AddDashItemScreen, DashNavigator } from './Dashboard'
+import { DashboardScreen, AddDashItemScreen, DashNavigator } from './Dashboard';
 
-import { AlertListScreen, AddAlertScreen, AddRelativeThresholdAlertScreen, AddStaticThresholdAlertScreen, AlertDetailScreen, AlertNavigator } from './Alerts'
+import { AlertListScreen, AddAlertScreen, AddRelativeThresholdAlertScreen, AddStaticThresholdAlertScreen, AlertDetailScreen, AlertNavigator } from './Alerts';
 
-import { styles, authStyles, colors } from './styles'
+import { styles, authStyles, colors } from './styles';
+
+import { FontAwesome } from '@expo/vector-icons';
 
 
 class LoadingScreen extends Component {
@@ -195,16 +197,28 @@ export default class App extends Component {
 
 const TabNavigator = createBottomTabNavigator(
   {
-  Dashboard: {screen: DashNavigator},
-  Home: {screen: AlertNavigator}
+  Dashboard: {screen: DashNavigator,
+    navigationOptions: {
+          tabBarIcon: ({ tintColor }) => (
+            <FontAwesome name="dashboard" size={32} color={tintColor} />
+          )
+        }},
+  Home: {screen: AlertNavigator,
+    navigationOptions: {
+          tabBarIcon: ({ tintColor }) => (
+            <FontAwesome name="exclamation-triangle" size={28} color={tintColor} />
+          )
+        }}
   }, {
   tabBarOptions: {
   activeTintColor: colors.colorOne,
-  labelStyle: {
-    fontSize: 24,
-  },
+  showLabel: false,
   style: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  tabStyle: {
     alignItems: 'center',
     justifyContent: 'center'
   }

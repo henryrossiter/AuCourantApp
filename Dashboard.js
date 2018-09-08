@@ -9,6 +9,9 @@ import { Notifications } from 'expo';
 
 import * as firebase from 'firebase';
 
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+
+
 function addCom(newStock) {
   this.state.stockList.unshift(newStock)
   this.saveKey(this.state.stockList)
@@ -182,14 +185,14 @@ class Commodity extends Component{
           <View style = {dashboardStyles.listItemDetailsContainer}>
             <Text style= {dashboardStyles.detailText}>{"Last updated: "+this.state.dataSource[0].toString().split(",")[0]+" | "}</Text>
             <TouchableOpacity onPress={ () => {this.setState({isExpanded: true})}}>
-              <Text style = {dashboardStyles.MoreLessText}>More</Text>
+              <MaterialIcons name="expand-more" size={32} color={colors.colorOne} />
             </TouchableOpacity>
           </View>
         </View>
       );
     } else {
       return (
-        <View style = {dashboardStyles.listItemContainer}>
+        <View style = {styles.listItemContainer}>
           <View style = {dashboardStyles.listItemSummaryContainer}>
             <View style = {dashboardStyles.listItemIdContainer}>
               <Text style= {dashboardStyles.itemIdText}>{this.stock.charAt(0).toUpperCase()+this.stock.substring(1)+": "}</Text>
@@ -201,18 +204,18 @@ class Commodity extends Component{
           <View style = {dashboardStyles.listItemDetailsContainer}>
             <Text style= {dashboardStyles.detailText}>{"Last updated: "+this.state.dataSource[0].toString().split(",")[0]+" | "}</Text>
             <TouchableOpacity onPress={() => { this.setState({isExpanded: false}) }}>
-              <Text style = {dashboardStyles.MoreLessText}>Less</Text>
+              <MaterialIcons name="expand-less" size={32} color={colors.colorOne} />
             </TouchableOpacity>
           </View>
           <View style={dashboardStyles.listItemExpandContainer}>
             <TouchableOpacity style = {dashboardStyles.listItemMoreDataContainer}>
-              <Text>More Data</Text>
+              <FontAwesome name="database" size={22} color={colors.colorOne} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               removeCom(this.props.index);
             }}
             style = {dashboardStyles.listItemDeleteContainer}>
-              <Text>Delete</Text>
+              <FontAwesome name="remove" size={24} color={colors.colorOne} />
             </TouchableOpacity>
           </View>
         </View>
@@ -238,35 +241,35 @@ export class AddDashItemScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style ={styles.addAlertBodyContainer}>
-      <Text style = {{}}>{'Within the '}</Text>
-      <View style={styles.inputContainer}>
-        <Picker
-          style={{height: 50, flex:1}}
-          selectedValue={"LME"}>
-          <Picker.Item label="London Metal Exchange" value="LME" />
-        </Picker>
+      <View style ={styles.bodyContainer}>
+        <Text style = {{}}>{'Within the '}</Text>
+          <View style={styles.inputContainer}>
+            <Picker
+              style={{height: 50, flex:1}}
+              selectedValue={"LME"}>
+              <Picker.Item label="London Metal Exchange" value="LME" />
+            </Picker>
+          </View>
+        <Text style = {{}}>{'I would like to track the price of '}</Text>
+        <View style={styles.inputContainer}>
+          <Picker
+            style={{height: 50, flex:1}}
+            selectedValue={this.state.item}
+            onValueChange={(itemValue, itemIndex) => this.setState({item: itemValue})}>
+            <Picker.Item label="Aluminum" value="al" />
+            <Picker.Item label="Copper" value="cu" />
+            <Picker.Item label="Zinc" value="zi"/>
+          </Picker>
         </View>
-      <Text style = {{}}>{'I would like to track the price of '}</Text>
-      <View style={styles.inputContainer}>
-        <Picker
-          style={{height: 50, flex:1}}
-          selectedValue={this.state.item}
-          onValueChange={(itemValue, itemIndex) => this.setState({item: itemValue})}>
-          <Picker.Item label="Aluminum" value="al" />
-          <Picker.Item label="Copper" value="cu" />
-          <Picker.Item label="Zinc" value="zi"/>
-        </Picker>
-        </View>
-
-        <Button
-          title = "Add to Dashboard"
+        <TouchableOpacity
           onPress={() => {
             addCom(this.state.item);
             navigate('Dash');
-          }}
-          style={styles.addListItem}>
-        </Button>
+          }}>
+          <View style = {styles.listItemContainerCentered}>
+            <MaterialIcons name="playlist-add" size={32} color={colors.colorOne} />
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }

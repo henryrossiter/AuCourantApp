@@ -34,14 +34,12 @@ export class StaticThresholdAlert extends Component{
 export class IntervalAlert extends Component{
   constructor(props) {
     super(props);
-    this.interval = this.props.interval;
-    this.stock = this.props.stock;
   }
   getCurrPrice() {
     return 0;
   }
   getDescription() {
-    return "You will be notified of the price of "+this.stock+" every "+this.interval;
+    return "You will be notified of the price of "+this.props.stock+" every "+this.props.interval;
   }
   getItem(){
     return this.stock;

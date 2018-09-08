@@ -114,6 +114,15 @@ export const styles = {
     borderRadius: 2,
     margin: styleScheme.margin
   },
+  listItemContainerCentered: {
+    padding: styleScheme.padding,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 2,
+    margin: styleScheme.margin
+  },
   addAlertBodyContainer: {
     margin: styleScheme.margin,
     flex: 1,

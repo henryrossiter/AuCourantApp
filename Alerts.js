@@ -61,13 +61,14 @@ export class AlertListScreen extends Component {
     //add alert to firebase
     let uid = firebase.auth().currentUser.uid;
     firebase.database().ref("users").child(uid).update({
-      alerts : this.state.notList.slice(0)
+      alerts : this.state.notList
     })
   }
   async clearList() {
     try {
       await AsyncStorage.removeItem('alerts');
       this.setState({notList: []});
+      Notifications.cancelAllScheduledNotificationsAsync();
     } catch (error) {
       console.log("Error resetting notList data" + error);
     }

@@ -13,6 +13,8 @@ import * as firebase from 'firebase';
 
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
+import { PriceDetailScreen } from './priceDetails'
+
 function addNot(newItem, newInt) {
   console.log(Array.from(arguments));
   this.state.notList.unshift(Array.from(arguments));
@@ -137,7 +139,7 @@ export class AddAlertScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <ScrollView>
+      <ScrollView style={styles.bodyContainer}>
         <TouchableOpacity onPress={() => navigate('AddIntervalAlert')} style={styles.listItemContainer}>
           <Text style = {newAlertStyles.newAlertTitleText}>Interval Alert</Text>
           <Text style = {newAlertStyles.newAlertDescText}>Receive price alerts at a scheduled time interval</Text>
@@ -193,7 +195,7 @@ export class AddIntervalAlertScreen extends Component {
             navigate('Home')
           }}>
           <View style = {styles.listItemContainerCentered}>
-            <MaterialIcons name="playlist-add" size={32} color={colors.colorOne} />
+            <FontAwesome name="save" size={32} color={colors.colorOne} />
           </View>
         </TouchableOpacity>
       </View>
@@ -257,7 +259,7 @@ export class AlertDetailScreen extends Component {
 
 export const  AlertNavigator = createStackNavigator({
   Home: {screen: AlertListScreen},
-  AlertDetails: {screen: AlertDetailScreen},
+  AlertDetails: {screen: PriceDetailScreen},
   NewAlert: {screen: AddAlertScreen},
   AddIntervalAlert: {screen: AddIntervalAlertScreen}
 });

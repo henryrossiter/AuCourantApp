@@ -11,6 +11,8 @@ import * as firebase from 'firebase';
 
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
+import { DashPriceDetailScreen } from './priceDetails'
+
 
 function addCom(newStock) {
   this.state.stockList.unshift(newStock)
@@ -140,7 +142,8 @@ class Commodity extends Component{
   constructor(props){
     super(props);
     this.state ={ isLoading: true,
-                  isExpanded: false}
+                  isExpanded: false,
+                  showDetails: false }
     this.stock = this.props.stock;
     this.currPrice = 0;
   }
@@ -170,6 +173,41 @@ class Commodity extends Component{
           <ActivityIndicator/>
         </View>
       );
+    }
+    if (this.state.isExpanded && this.state.showDetails){
+      return (
+        <View style = {styles.listItemContainer}>
+          <View style = {dashboardStyles.listItemSummaryContainer}>
+            <View style = {dashboardStyles.listItemIdContainer}>
+              <Text style= {dashboardStyles.itemIdText}>{this.stock.charAt(0).toUpperCase()+this.stock.substring(1)+": "}</Text>
+            </View>
+            <View style = {dashboardStyles.listItemPriceContainer}>
+              <Text style= {dashboardStyles.priceText}>{"$"+this.state.dataSource[0].toString().split(",")[1]}</Text>
+            </View>
+          </View>
+          <View style = {dashboardStyles.listItemDetailsContainer}>
+            <Text style= {dashboardStyles.detailText}>{"Last updated: "+this.state.dataSource[0].toString().split(",")[0]+" | "}</Text>
+            <TouchableOpacity onPress={() => { this.setState({isExpanded: false,
+                                                              showDetails: false}) }}>
+              <MaterialIcons name="expand-less" size={32} color={colors.colorOne} />
+            </TouchableOpacity>
+          </View>
+          <View style={dashboardStyles.listItemExpandContainer}>
+            <TouchableOpacity onPress={() => {this.setState( {showDetails: false} )}}
+            style = {dashboardStyles.listItemMoreDataContainer}>
+              <FontAwesome name="database" size={22} color={colors.colorOne} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              removeCom(this.props.index);
+            }}
+            style = {dashboardStyles.listItemDeleteContainer}>
+              <FontAwesome name="remove" size={24} color={colors.colorOne} />
+            </TouchableOpacity>
+          </View>
+          <DashPriceDetailScreen style = {dashboardStyles.shortDataListContainer} itemKey={this.props.stock}>
+          </DashPriceDetailScreen>
+        </View>
+      )
     }
     else if (this.state.isExpanded==false) {
       return (
@@ -208,7 +246,8 @@ class Commodity extends Component{
             </TouchableOpacity>
           </View>
           <View style={dashboardStyles.listItemExpandContainer}>
-            <TouchableOpacity style = {dashboardStyles.listItemMoreDataContainer}>
+            <TouchableOpacity onPress={() => {this.setState( {showDetails: true} )}}
+            style = {dashboardStyles.listItemMoreDataContainer}>
               <FontAwesome name="database" size={22} color={colors.colorOne} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
@@ -267,7 +306,7 @@ export class AddDashItemScreen extends Component {
             navigate('Dash');
           }}>
           <View style = {styles.listItemContainerCentered}>
-            <MaterialIcons name="playlist-add" size={32} color={colors.colorOne} />
+            <FontAwesome name="save" size={32} color={colors.colorOne} />
           </View>
         </TouchableOpacity>
       </View>
@@ -277,5 +316,5 @@ export class AddDashItemScreen extends Component {
 
 export const DashNavigator = createStackNavigator({
   Dash: {screen: DashboardScreen},
-  NewDashItem: {screen: AddDashItemScreen}
+  NewDashItem: {screen: AddDashItemScreen},
 });

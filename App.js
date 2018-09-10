@@ -22,7 +22,7 @@ class LoadingScreen extends Component {
     const { navigate } = this.props.navigation;
     //firebase.auth().onAuthStateChanged(user => {
     //  navigate(user ? 'Main' : 'SignUp')
-    navigate('SignUp')
+    navigate('Login');
     //})
   }
   render() {
@@ -164,6 +164,7 @@ class WelcomeScreen extends Component {
 
     firebase.database().ref("users").child(uid).update({
       expoToken: expoTok,
+      //fireToken: fireTok,
     })
   }
   render() {
@@ -177,7 +178,7 @@ export default class App extends Component {
   constructor(){
     super();
     console.ignoredYellowBox = ['Setting a timer'];
-    var config = {
+    const config = {
       apiKey: "AIzaSyDfw025ab2w3_oA_vXZShimqlmJMAom4rE",
       authDomain: "aucourantexpo.firebaseapp.com",
       databaseURL: "https://aucourantexpo.firebaseio.com",
@@ -188,9 +189,9 @@ export default class App extends Component {
     }
   }
   render() {
-        return (
-        <AppNavigation/>
-        );
+    return (
+      <AppNavigation/>
+    );
   }
 }
 
@@ -211,22 +212,22 @@ const TabNavigator = createBottomTabNavigator(
         }}
   }, {
   tabBarOptions: {
-  activeTintColor: colors.colorOne,
-  showLabel: false,
-  style: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  tabStyle: {
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
+    activeTintColor: colors.colorOne,
+    showLabel: false,
+    style: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    tabStyle: {
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
 }
 }
 );
 
-const RootStackNavigator = createSwitchNavigator({
+const RootSwitchNavigator = createSwitchNavigator({
   Loading: { screen: LoadingScreen },
   Login: { screen: LoginScreen },
   SignUp: {screen: SignUpScreen },
@@ -236,6 +237,5 @@ const RootStackNavigator = createSwitchNavigator({
 
 })
 const AppNavigation = () => (
-  //<TabNavigator/>
-  <RootStackNavigator/>
+  <RootSwitchNavigator/>
 );

@@ -42,7 +42,9 @@ export const authStyles = {
 }
 
 export const dashboardStyles = {
-
+  shortDataListContainer: {
+    height: 100
+  },
   listItemDetailsContainer: {
     flexDirection: 'row',
     margin: styleScheme.margin/2,
@@ -106,6 +108,15 @@ export const styles = {
     backgroundColor: colors.colorOneAccent,
     flex: 1,
     flexWrap: 'wrap',
+  },
+  scrollViewStyle: {
+    padding: styleScheme.padding,
+    flexDirection: 'column',
+    borderWidth: 1,
+    borderRadius: 2,
+    margin: styleScheme.margin,
+    height: 1200,
+    alignItems: 'center'
   },
   listItemContainer: {
     padding: styleScheme.padding,

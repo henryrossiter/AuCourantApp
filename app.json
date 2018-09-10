@@ -8,6 +8,7 @@
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
+    "primaryColor": "#fc8419",
     "icon": "./assets/AuCourantIcon.png",
     "splash": {
       "image": "./assets/AuCourantSplash.png",
@@ -21,7 +22,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.henryrossiter.aucourant",
     },
     "android": {
       "package": "com.henryrossiter.aucourant",

@@ -28,14 +28,13 @@ export const authStyles = {
     },
     buttonContainer:{
         height: 40,
-        backgroundColor: colors.colorOne,
         borderRadius: styleScheme.itemRadius,
         borderWidth: styleScheme.borderWidth,
         padding: styleScheme.padding,
         margin: styleScheme.margin,
     },
     buttonText:{
-        color: '#fff',
+        color: 'colors.colorOne',
         textAlign: 'center',
         fontWeight: '700'
     }

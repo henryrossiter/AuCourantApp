@@ -16,6 +16,8 @@ import { styles, authStyles, colors } from './styles';
 
 import { FontAwesome } from '@expo/vector-icons';
 
+import {appRegConfig } from './config'
+
 
 class LoadingScreen extends Component {
   componentDidMount() {
@@ -156,15 +158,12 @@ class WelcomeScreen extends Component {
     if (finalStatus !== 'granted') { return; }
 
     let expoTok = await Notifications.getExpoPushTokenAsync();
-    let senderConfig = {
-      fcmSenderId: "1068249737288"
-    };
-    //let fireTok = await Notifications.getDevicePushTokenAsync(senderConfig);
+    let fireTok = await Notifications.getDevicePushTokenAsync();
     let uid = firebase.auth().currentUser.uid;
 
     firebase.database().ref("users").child(uid).update({
       expoToken: expoTok,
-      //fireToken: fireTok,
+      fireToken: fireTok,
     })
   }
   render() {
@@ -178,14 +177,9 @@ export default class App extends Component {
   constructor(){
     super();
     console.ignoredYellowBox = ['Setting a timer'];
-    const config = {
-      apiKey: "AIzaSyDfw025ab2w3_oA_vXZShimqlmJMAom4rE",
-      authDomain: "aucourantexpo.firebaseapp.com",
-      databaseURL: "https://aucourantexpo.firebaseio.com",
-      storageBucket: "aucourantexpo.appspot.com",
-    };
+
     if (!firebase.apps.length) {
-      firebase.initializeApp(config);
+      firebase.initializeApp(appRegConfig);
     }
   }
   render() {
